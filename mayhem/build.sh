@@ -16,10 +16,15 @@
 #
 ################################################################################
 
+# Clang 22 (oss-fuzz base-builder) emits DWARF 5 by default; pin to DWARF 4
+# so the bundled GNU ld can parse the debug info at link time.
+export CFLAGS="$CFLAGS -gdwarf-4"
+export CXXFLAGS="$CXXFLAGS -gdwarf-4"
+
 cd $SRC/leveldb
 mkdir -p build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DLEVELDB_BUILD_TESTS=0 \
-    -DLEVELDB_BUILD_BENCHMARKS=0 .. && cmake --build .
+    -DLEVELDB_BUILD_BENCHMARKS=0 -DCMAKE_CXX_STANDARD=17 .. && cmake --build .
 
 for fuzzer in fuzz_db; do
     # Compile
