@@ -1,0 +1,5 @@
+project: leveldb
+target: fuzz_db
+cmds:
+  - cmd: /mayhem/fuzz_db
+    libfuzzer: true
